@@ -224,7 +224,7 @@ class CustomDatasetFromImagesTemporal(SatelliteDataset):
 
         self.timestamp_arr = np.asarray(self.data_info.iloc[:, 2])
         self.name2index = dict(zip(
-            [os.path.join(self.dataset_root_path, x) for x in self.image_arr],
+            [os.path.normpath(os.path.join(self.dataset_root_path, x)) for x in self.image_arr],
             np.arange(self.data_len)
         ))
 
@@ -234,19 +234,35 @@ class CustomDatasetFromImagesTemporal(SatelliteDataset):
         std = [0.28774282336235046, 0.27541765570640564, 0.2764017581939697]
         self.normalization = transforms.Normalize(mean, std)
         self.totensor = transforms.ToTensor()
-        self.scale = transforms.Scale(224)
+        self.scale = transforms.Resize(224)
 
     def __getitem__(self, index):
         # Get image name from the pandas df
         single_image_name_1 = self.image_arr[index]
-
-        suffix = single_image_name_1[-15:]
-        prefix = single_image_name_1[:-15].rsplit('_', 1)
+        print(f"single image name : {single_image_name_1}")
+        suffix = single_image_name_1[-8:]
+        prefix = single_image_name_1[:-8].rsplit('_', 1)
+        print(f"prefix : {prefix}")
+        print(f"suffix : {suffix}")
         regexp = '{}_*{}'.format(prefix[0], suffix)
+        
         regexp = os.path.join(self.dataset_root_path, regexp)
+        regexp = os.path.normpath(regexp)
+        # regexp = regexp.replace('\\', '/')
+        # print(f"regexp : {regexp}")
         single_image_name_1 = os.path.join(self.dataset_root_path, single_image_name_1)
+        single_image_name_1 = os.path.normpath(single_image_name_1)
+        single_image_name_1 = single_image_name_1.replace('/', '\\')
+        # single_image_name_1 = os.path.normpath(single_image_name_1)
+        # single_image_name_1 = single_image_name_1.replace('\\', '/')
+        print(f"Generated regexp: {regexp}")
         temporal_files = glob(regexp)
+        print(f"Matched files: {temporal_files}")
+        # temporal_files = [f.replace('\\', '/') for f in temporal_files]
 
+        print(f"Available temporal_files: {temporal_files}")
+        print(f"Trying to remove: {single_image_name_1}")
+        
         temporal_files.remove(single_image_name_1)
         if temporal_files == []:
             single_image_name_2 = single_image_name_1
@@ -311,7 +327,11 @@ class CustomDatasetFromImagesTemporal(SatelliteDataset):
         img_as_tensor_1 = self.normalization(img_as_tensor_1)
         img_as_tensor_2 = self.normalization(img_as_tensor_2)
         img_as_tensor_3 = self.normalization(img_as_tensor_3)
-
+        
+        # print(single_image_name_1+"+++++++++++++++++++++++")
+        # print(single_image_name_2+"+++++++++++++++++++++++")
+        # print(single_image_name_3+"+++++++++++++++++++++++")
+        # print(self.name2index)
         ts1 = self.parse_timestamp(single_image_name_1)
         ts2 = self.parse_timestamp(single_image_name_2)
         ts3 = self.parse_timestamp(single_image_name_3)
@@ -330,6 +350,7 @@ class CustomDatasetFromImagesTemporal(SatelliteDataset):
         return (imgs, ts, single_image_label)
 
     def parse_timestamp(self, name):
+        # print(name+"-------------------------------------------------------------")
         timestamp = self.timestamp_arr[self.name2index[name]]
         year = int(timestamp[:4])
         month = int(timestamp[5:7])

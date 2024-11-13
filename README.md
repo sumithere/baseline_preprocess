@@ -208,3 +208,16 @@ If you found our project helpful, please cite our paper:
     url={https://openreview.net/forum?id=WBhqzpF6KYH}
 }
 ```
+
+
+python main_pretrain.py --batch_size 8 --accum_iter 16 --norm_pix_loss --epochs 100 --blr 1.5e-4 --mask_ratio 0.75 --input_size 224 --patch_size 16 --model mae_vit_large_patch16 --model_type temporal --dataset_type temporal --train_path "D:/fmow/fmow_dataset/train_62classes.csv" --output_dir "C:/Users/sumit/OneDrive/Desktop/vit_fmow/SatMAE/output" --log_dir "C:/Users/sumit/OneDrive/Desktop/vit_fmow/SatMAE/output" --num_workers 8
+
+python main_pretrain.py --batch_size 8 --accum_iter 16 --norm_pix_loss --epochs 100 --blr 1.5e-4 --mask_ratio 0.75 --input_size 224 --patch_size 16 --model mae_vit_large_patch16 --model_type temporal --dataset_type temporal --train_path "data/train_62classes.csv" --output_dir "output" --log_dir "output" --num_workers 8           
+
+python main_pretrain.py --batch_size 8 --accum_iter 16 --norm_pix_loss --epochs 100 --blr 1.5e-4 --mask_ratio 0.75 --input_size 224 --patch_size 16 --model mae_vit_large_patch16 --model_type temporal --dataset_type temporal --train_path "data/processed_images_metadata_train.csv" --output_dir "output" --log_dir "output" --num_workers 8   
+
+python main_pretrain.py --batch_size 8 --accum_iter 16 --norm_pix_loss --epochs 100 --blr 1.5e-4 --mask_ratio 0.75 --input_size 224 --patch_size 16 --model mae_vit_large_patch16 --model_type temporal --dataset_type temporal --train_path "./data/processed_images_metadata_train.csv" --output_dir "./output" --log_dir "./output" --num_workers 8
+
+python main_pretrain.py --batch_size 8 --accum_iter 16 --norm_pix_loss --epochs 100 --blr 1.5e-4 --mask_ratio 0.75 --input_size 224 --patch_size 16 --model mae_vit_large_patch16 --model_type temporal --dataset_type temporal --train_path "F:\vit_fmow\SatMAE\data\processed_images_metadata_train.csv" --output_dir "F:\vit_fmow\SatMAE\output" --log_dir "F:\vit_fmow\SatMAE\output" --num_workers 8    
+
+ python main_pretrain.py --batch_size 8 --accum_iter 16 --norm_pix_loss --epochs 100 --blr 1.5e-4 --mask_ratio 0.75 --input_size 224 --patch_size 16 --model mae_vit_large_patch16 --model_type temporal --dataset_type temporal --train_path "F:\vit_fmow\SatMAE\data\processed_images_metadata_train.csv" --output_dir "F:\vit_fmow\SatMAE\output" --log_dir "F:\vit_fmow\SatMAE\output" --num_workers 8

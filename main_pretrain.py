@@ -12,6 +12,7 @@ import os
 import time
 from pathlib import Path
 
+import torch.optim as optim
 import wandb
 import torch
 import torch.backends.cudnn as cudnn
@@ -19,7 +20,7 @@ from torch.utils.tensorboard import SummaryWriter
 
 import timm
 
-assert timm.__version__ == "0.3.2"  # version check
+# assert timm.__version__ == "0.3.2"  # version check
 import timm.optim.optim_factory as optim_factory
 
 import util.misc as misc
@@ -180,7 +181,7 @@ def main(args):
                                                 patch_size=args.patch_size,
                                                 in_chans=dataset_train.in_c,
                                                 norm_pix_loss=args.norm_pix_loss)
-    model.to(device)
+    # model.to(device)
 
     model_without_ddp = model
     print("Model = %s" % str(model_without_ddp))
@@ -201,8 +202,10 @@ def main(args):
         model_without_ddp = model.module
 
     # following timm: set wd as 0 for bias and norm layers
-    param_groups = optim_factory.add_weight_decay(model_without_ddp, args.weight_decay)
-    optimizer = torch.optim.AdamW(param_groups, lr=args.lr, betas=(0.9, 0.95))
+    # param_groups = optim_factory.add_weight_decay(model_without_ddp, args.weight_decay)
+    # optimizer = torch.optim.AdamW(param_groups, lr=args.lr, betas=(0.9, 0.95))
+    optimizer = optim.Adam(model_without_ddp.parameters(), lr=args.lr, weight_decay=args.weight_decay)
+
     print(optimizer)
     loss_scaler = NativeScaler()
 
